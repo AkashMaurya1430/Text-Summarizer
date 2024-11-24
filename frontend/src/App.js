@@ -23,7 +23,7 @@ function App() {
       return
     }
     
-    const response = await axios.post("http://localhost:5000/summarize", { text, x });
+    const response = await axios.post("https://text-summarizer-backend-azure.vercel.app/summarize", { text, x });
     setResults(response.data);
   };
   
