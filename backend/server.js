@@ -48,7 +48,7 @@ app.post("/summarize", async (req, res) => {
         const response = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
             model: 'llama3-8b-8192',
             messages: [
-                { role: 'system', content: `Create one line summary with no extra text` },
+                { role: 'system', content: `Summarize the essential details of this article in a one sentence. Do not include extra text` },
                 { role: 'user', content: sentence }
             ],
             temperature: 1,
