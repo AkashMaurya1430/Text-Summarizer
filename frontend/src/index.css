@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  @apply bg-gray-100;
+}
+
+textarea, input {
+  @apply w-full p-2 border border-gray-300 rounded mb-4;
+}
+
+button {
+  @apply w-fit bg-blue-500 text-white px-24 py-2 rounded hover:bg-blue-600 ;
+}
+
+.results {
+  @apply w-full mt-8 grid grid-cols-2 gap-4;
+}
+
+.results div {
+  @apply bg-white p-6 rounded-lg shadow-md;
+}
+
+.results h2 {
+  @apply text-xl font-bold mb-4;
+}
+
+.results p {
+  @apply mb-2;
+}
