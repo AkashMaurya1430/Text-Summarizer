@@ -4,7 +4,7 @@
 
 
 body {
-  @apply bg-gray-100;
+  @apply bg-gray-50;
 }
 
 textarea, input {
@@ -15,7 +15,7 @@ button {
   @apply w-fit bg-blue-500 text-white px-24 py-2 rounded hover:bg-blue-600 ;
 }
 
-.results {
+/* .results {
   @apply w-full mt-8 grid grid-cols-2 gap-4;
 }
 
@@ -29,4 +29,4 @@ button {
 
 .results p {
   @apply mb-2;
-}
+} */

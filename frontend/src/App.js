@@ -1,40 +1,71 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-
+import Card from "./components/Card";
+import Loader from "./components/Loader";
 
 function App() {
   const [text, setText] = useState("");
-  const [x, setX] = useState(3);
+  const [x, setX] = useState("");
   const [results, setResults] = useState({ sentences: [], summaries: [] });
+  const [loading, setLoading] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(null);
+  const [highlightedType, setHighlightedType] = useState(null);
+  const summariesContainerRef = useRef(null);
+
+
+  const scrollToCard = (cardRef) => {
+    if (cardRef.current && summariesContainerRef.current) {
+      // Scroll to the top of the card or center it in the container
+      cardRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',  // 'center' makes the card appear in the middle of the container
+        inline: 'nearest',
+      });
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!text.length) {
-      toast.warning("Please Enter text to summarize")
-      return
+      toast.warning("Please Enter text to summarize");
+      return;
     }
 
     if (x < 1) {
-      toast.warning("Please Enter Split Number")
-      return
+      toast.warning("Please Enter Split Number");
+      return;
     }
-    
-    const response = await axios.post("https://text-summarizer-backend-azure.vercel.app/summarize", { text, x });
-    setResults(response.data);
+
+    setLoading(true);
+
+    await axios
+      .post("http://localhost:5000/summarize", { text, x })
+      .then((response) => {
+        setResults(response.data.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log('err: ', err);
+        setResults({ sentences: [], summaries: [] });
+        toast.error(err.response.data.message);
+        setLoading(false);
+      });
   };
-  
-  const clearForm = ()=>{
+
+  const clearForm = () => {
     setText("");
     setX(3);
-    setResults({ sentences: [], summaries: [] })
-  }
+    setResults({ sentences: [], summaries: [] });
+  };
 
-
-
+  const handleHover = (index, type) => {
+    setHighlightedIndex(index);
+    setHighlightedType(type);
+  };
   return (
     <>
       <nav className="bg-gray-800 p-4">
@@ -44,9 +75,9 @@ function App() {
           </a>
         </div>
       </nav>
-      <div className="App">
-        <form onSubmit={handleSubmit} className="w-full">
-          <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Paste your text here" />
+      <div className="App ">
+        <form onSubmit={handleSubmit} className="w-full p-5">
+          <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Paste your text here" className="h-48" />
           <input type="number" placeholder="Enter split number" value={x} onChange={(e) => setX(e.target.value)} min="1" />
           <div className="flex flex-row justify-around">
             <button type="submit" className="w-fit ">
@@ -57,30 +88,54 @@ function App() {
             </button>
           </div>
         </form>
-        <div className="results w-full">
-          <div className="original">
-            <h2>Original Sentences</h2>
-            {results.sentences.map((sentence, index) => (
-              <>
-                <p key={index}>{sentence}</p>
-                <hr className="border-t-2 border-gray-300 dark:border-gray-700 my-4" />
-              </>
-            ))}
+
+        {loading ? (
+          <>
+            <Loader />{" "}
+          </>
+        ) : (
+          <>
+        <div className="results flex mt-10">
+          <div className="w-1/2 px-5">
+            <h2 className="text-xl mb-5 text-blue-900 font-semibold">Original Sentences</h2>
+            <div className="original max-h-[20rem] overflow-y-auto">
+              {results.sentences.map((sentence, index) => (
+                <>
+                  <Card key={index} index={index} sentence={sentence}
+                   type="original"
+                   highlightedIndex={highlightedIndex}
+                   onHover={handleHover}  scrollToCard={scrollToCard}
+                  />
+                  {/* <p key={index}>{sentence}</p>
+                  <hr className="border-t-2 border-gray-300 dark:border-gray-700 my-4" /> */}
+                </>
+              ))}
+            </div>
           </div>
-          <div className="summary">
-            <h2>Summaries</h2>
-            {results.summaries.map((summary, index) => (
-              <>
-                <p key={index}>{summary}</p>
-                <hr className="border-t-2 border-gray-300 dark:border-gray-700 my-4" />
-              </>
-            ))}
+          <div className="w-1/2 px-5">
+            <h2 className="text-xl mb-5 text-blue-900 font-semibold">Summaries</h2>
+            <div  ref={summariesContainerRef} className="summary max-h-[20rem] overflow-y-auto">
+              {results.summaries.map((summary, index) => (
+                <>
+                  <Card key={index} index={index} sentence={summary}
+                  type="summary"
+                  highlightedIndex={highlightedIndex}
+                  onHover={handleHover}  scrollToCard={scrollToCard}
+                  />
+
+                  {/* <p key={index}>{summary}</p>
+                  <hr className="border-t-2 border-gray-300 dark:border-gray-700 my-4" /> */}
+                </>
+              ))}
+            </div>
           </div>
         </div>
+          
+          </>
+        )}
       </div>
 
-      <ToastContainer position="top-center"
-autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={3000} />
     </>
   );
 }

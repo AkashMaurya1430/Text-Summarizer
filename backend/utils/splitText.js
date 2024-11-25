@@ -5,7 +5,7 @@ function splitText(text,x) {
 
     if (!sentences) {
        console.log( "No sentences found.");
-        return;
+        return [];
     }
 
     const result = [];

@@ -22,29 +22,13 @@ app.post("/summarize", async (req, res) => {
   // Split text into sentences
   const sentences = splitText(text, x);
 
+  if(sentences.length < 1){
+    return res.status(400).send({ message: "No sentences found" });
+  }
+
   // Summarize each sentence
   const summaries = await Promise.all(
     sentences.map(async (sentence) => {
-    //   try {
-    //     const response = await axios.post(
-    //       "https://api.groq.com/openai/v1/chat/completions",
-    //       {
-    //         model: "llama3-8b-8192",
-    //         messages: [{ role: "user", content: sentence }],
-    //         apiKey: process.env.GROQ_API_KEY,
-    //       },
-    //       {
-    //         httpsAgent: new https.Agent({
-    //           rejectUnauthorized: false,
-    //         }),
-    //       }
-    //     );
-    //     console.log(response);
-    //     return response.data.choices[0].message.content;
-    //   } catch (err) {
-    //     console.error("Error summarizing sentence:", sentence, err.response);
-    //     return sentence; // Return the original sentence in case of an error
-    //   }
 
     try {
         const response = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
@@ -76,7 +60,8 @@ app.post("/summarize", async (req, res) => {
     })
   );
 
-  res.json({ sentences, summaries });
+  res.status(200).send({ message: "No sentences found",data:{ sentences, summaries } });
+
 });
 
 app.listen(PORT, () => {
