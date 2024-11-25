@@ -42,8 +42,9 @@ function App() {
 
     setLoading(true);
 
+    // https://text-summarizer-backend-ben7uqc1w-akashmaurya1430s-projects.vercel.app/ DEployed URl
     await axios
-      .post("http://localhost:5000/summarize", { text, x })
+      .post("https://text-summarizer-backend-ben7uqc1w-akashmaurya1430s-projects.vercel.app/summarize", { text, x })
       .then((response) => {
         setResults(response.data.data);
         setLoading(false);
