@@ -78,11 +78,11 @@ function App() {
         <form onSubmit={handleSubmit} className="w-full p-5">
           <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Paste your text here" className="h-48" />
           <input type="number" placeholder="Enter split number" value={x} onChange={(e) => setX(e.target.value)} min="1" />
-          <div className="flex flex-row justify-around">
+          <div className="md:flex flex-row justify-around">
             <button type="submit" className="w-fit ">
               Summarize
             </button>
-            <button type="button" className="w-fit" onClick={clearForm}>
+            <button type="button" className="w-fit mt-2 md:mt-0" onClick={clearForm}>
               Clear
             </button>
           </div>
