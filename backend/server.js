@@ -37,14 +37,14 @@ app.post("/summarize", async (req, res) => {
                 { role: 'system', content: `Summarize the essential details of this article in a one sentence. Do not include extra text` },
                 { role: 'user', content: sentence }
             ],
-            temperature: 1,
+            temperature: 0,
             // max_tokens: 1024,
             top_p: 1,
             // stream: false,
             stop: null
         }, {
             headers: {
-                'Authorization': `Bearer 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`
+                'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
             }, httpsAgent: new https.Agent({
                 rejectUnauthorized: false,
               }),

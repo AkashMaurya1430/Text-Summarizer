@@ -12,7 +12,6 @@ function App() {
   const [results, setResults] = useState({ sentences: [], summaries: [] });
   const [loading, setLoading] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(null);
-  const [highlightedType, setHighlightedType] = useState(null);
   const summariesContainerRef = useRef(null);
 
 
@@ -44,7 +43,7 @@ function App() {
 
     // https://text-summarizer-backend-ben7uqc1w-akashmaurya1430s-projects.vercel.app/ DEployed URl
     await axios
-      .post("https://text-summarizer-backend-ben7uqc1w-akashmaurya1430s-projects.vercel.app/summarize", { text, x })
+      .post("http://localhost:5000/summarize", { text, x })
       .then((response) => {
         setResults(response.data.data);
         setLoading(false);
@@ -65,7 +64,6 @@ function App() {
 
   const handleHover = (index, type) => {
     setHighlightedIndex(index);
-    setHighlightedType(type);
   };
   return (
     <>
@@ -76,7 +74,7 @@ function App() {
           </a>
         </div>
       </nav>
-      <div className="App ">
+      <div className="App mb-10">
         <form onSubmit={handleSubmit} className="w-full p-5">
           <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Paste your text here" className="h-48" />
           <input type="number" placeholder="Enter split number" value={x} onChange={(e) => setX(e.target.value)} min="1" />
@@ -103,7 +101,7 @@ function App() {
               {results.sentences.map((sentence, index) => (
                 <>
                   <Card key={index} index={index} sentence={sentence}
-                   type="original"
+                   type="blob"
                    highlightedIndex={highlightedIndex}
                    onHover={handleHover}  scrollToCard={scrollToCard}
                   />

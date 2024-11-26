@@ -19,8 +19,8 @@ const Card = ({ index, sentence,  type, highlightedIndex, onHover,scrollToCard})
     onMouseEnter={() => onHover(index, type)} 
     onMouseLeave={() => onHover(null, null)}
     >
-
-      <p key={index}>{sentence}</p>
+        <h5 className="text-md font-semibold capitalize">{type } {index + 1}</h5>
+      <p className="text-slate-700" key={index}>{sentence}</p>
     </div>
   );
 };
