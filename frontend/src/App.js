@@ -43,7 +43,7 @@ function App() {
 
     // https://text-summarizer-backend-azure.vercel.app DEployed URl
     await axios
-      .post("https://text-summarizer-backend-azure.vercel.app/summarize", { text, x })
+      .post("http://localhost:5000/summarize", { text, x })
       .then((response) => {
         setResults(response.data.data);
         setLoading(false);
@@ -58,7 +58,7 @@ function App() {
 
   const clearForm = () => {
     setText("");
-    setX(3);
+    setX("");
     setResults({ sentences: [], summaries: [] });
   };
 
