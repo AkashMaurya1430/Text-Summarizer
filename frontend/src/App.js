@@ -15,8 +15,8 @@ function App() {
   const summariesContainerRef = useRef(null);
 
   // Calculations Based on Groq, api rate limiter
-  const batchSize = 3; // Number of groups per batch, ideally keep 10
-  const requestsPerMinute = 10; // Limit of groups per minute, ideally keep 30
+  const batchSize = 10; // Number of groups per batch, ideally keep 10
+  const requestsPerMinute = 30; // Limit of groups per minute, ideally keep 30
   const revivalTime = 60 * 1000; // Time to wait for cooldown, ideally keep 1 min => 60 * 1000
   let processedThisMinute = 0;
 
